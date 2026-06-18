@@ -2,17 +2,35 @@ Tài khoản có sẵn:
 - Admin: admin / 123456
 - Khách hàng: khach / 123
 
-Chức năng:
-- Đăng nhập, đăng ký khách hàng.
-- Phân quyền Admin và Khách hàng.
-- Admin xem thống kê: tổng sản phẩm, tồn kho, đơn hàng, doanh thu.
-- Admin thêm, sửa, xóa, tìm kiếm sản phẩm.
-- Khách hàng xem sản phẩm, tìm kiếm, thêm vào giỏ hàng.
-- Khách hàng thanh toán, nhập thông tin giao hàng, chọn phương thức thanh toán.
-- Khách hàng xem lịch sử đơn hàng.
-- Admin xem toàn bộ đơn hàng và cập nhật trạng thái: Chờ xử lý, Đang giao, Hoàn thành, Đã hủy.
-- JUnit kiểm thử đăng nhập, đăng ký, thêm/sửa/xóa sản phẩm, mua hàng, thanh toán, giảm giá, cập nhật đơn hàng.
+- TestAuth.java
+- TestProd.java
+- TestCart.java
+- TestOrder.java
+- TestSnF.java
 
-Chạy kiểm thử:
-- Mở src/test/java/StoreServiceTest.java.
-- Chuột phải chọn Run StoreServiceTest.
+Xác thực người dùng
+1. testLoginAdminSuccess
+2. testLoginWrongPassword
+3. testRegisterCustomerSuccess
+4. testRegisterDuplicateUsername
+
+Quản lý sản phẩm
+5. testAdminAddProduct
+6. testAdminUpdateProduct
+7. testAdminDeleteProduct
+
+Giỏ hàng và thanh toán
+8. testCheckoutSuccessAndReduceStock
+9. testCheckoutEmptyCart
+10. testBuyMoreThanStock
+11. testDiscountWhenTotalOverOneMillion
+
+Quản lý đơn hàng
+12. testCustomerViewOrderHistory
+13. testAdminViewAllOrders
+14. testUpdateOrderStatus
+
+Tìm kiếm và lọc sản phẩm
+15. testSearchProductSuccess
+16. testSearchProductNoResult
+17. testFilterAvailableProduts
