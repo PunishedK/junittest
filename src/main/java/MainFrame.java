@@ -16,7 +16,10 @@ public class MainFrame extends JFrame {
     private JPasswordField loginPassword;
     private JTextField registerFullName;
     private JTextField registerUsername;
+    private JTextField registerEmail;
+    private JTextField registerPhone;
     private JPasswordField registerPassword;
+    private JPasswordField registerConfirmPassword;
 
     private DefaultTableModel adminProductModel;
     private JTable adminProductTable;
@@ -136,14 +139,17 @@ public class MainFrame extends JFrame {
 
         JPanel form = new JPanel(new GridLayout(0, 1, 0, 10));
         form.setOpaque(false);
-        form.setPreferredSize(new Dimension(430, 410));
+        form.setPreferredSize(new Dimension(460, 630));
 
         JLabel title = Ui.title("Đăng Ký Khách Hàng");
         title.setHorizontalAlignment(SwingConstants.CENTER);
 
         registerFullName = Ui.input();
         registerUsername = Ui.input();
+        registerEmail = Ui.input();
+        registerPhone = Ui.input();
         registerPassword = Ui.password();
+        registerConfirmPassword = Ui.password();
 
         JButton btnRegister = Ui.button("Tạo tài khoản", Ui.SUCCESS);
         JButton btnBack = Ui.button("Quay lại đăng nhập", Ui.WARNING);
@@ -153,8 +159,14 @@ public class MainFrame extends JFrame {
         form.add(registerFullName);
         form.add(label("Tên đăng nhập"));
         form.add(registerUsername);
+        form.add(label("Email"));
+        form.add(registerEmail);
+        form.add(label("Số điện thoại"));
+        form.add(registerPhone);
         form.add(label("Mật khẩu"));
         form.add(registerPassword);
+        form.add(label("Xác nhận mật khẩu"));
+        form.add(registerConfirmPassword);
         form.add(btnRegister);
         form.add(btnBack);
 
@@ -210,9 +222,19 @@ public class MainFrame extends JFrame {
 
     private void register() {
         try {
-            service.registerCustomer(registerUsername.getText().trim(), new String(registerPassword.getPassword()), registerFullName.getText().trim());
+            String username = registerUsername.getText().trim();
+            service.registerCustomer(
+                    username,
+                    new String(registerPassword.getPassword()),
+                    new String(registerConfirmPassword.getPassword()),
+                    registerFullName.getText().trim(),
+                    registerEmail.getText().trim(),
+                    registerPhone.getText().trim()
+            );
             Ui.message(this, "Đăng ký thành công! Vui lòng đăng nhập.");
             showLogin();
+            loginUsername.setText(username);
+            loginPassword.requestFocusInWindow();
         } catch (IllegalArgumentException ex) {
             Ui.message(this, ex.getMessage());
         }
@@ -707,6 +729,7 @@ public class MainFrame extends JFrame {
             );
             cart.clear();
             txtReceiverName.setText("");
+            fillCustomerInformation();
             txtPhone.setText("");
             txtAddress.setText("");
 
@@ -741,7 +764,10 @@ public class MainFrame extends JFrame {
     private void showRegister() {
         registerFullName.setText("");
         registerUsername.setText("");
+        registerEmail.setText("");
+        registerPhone.setText("");
         registerPassword.setText("");
+        registerConfirmPassword.setText("");
         cardLayout.show(root, "register");
     }
 
@@ -755,6 +781,7 @@ public class MainFrame extends JFrame {
 
     private void showCustomer() {
         cardLayout.show(root, "customer");
+        fillCustomerInformation();
         loadCustomerProducts();
         if (customerSearch != null) {
             SwingUtilities.invokeLater(() -> customerSearch.requestFocusInWindow());
@@ -767,5 +794,19 @@ public class MainFrame extends JFrame {
         currentUser = null;
         cart.clear();
         showLogin();
+    }
+
+    private void fillCustomerInformation() {
+        if (currentUser == null
+                || txtReceiverName == null
+                || txtPhone == null) {
+            return;
+        }
+        txtReceiverName.setText(
+                currentUser.getFullName()
+        );
+        txtPhone.setText(
+                currentUser.getPhone()
+        );
     }
 }
